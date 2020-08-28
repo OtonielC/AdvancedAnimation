@@ -1,0 +1,54 @@
+body {
+  background-color: #2c6dd6;
+}
+#title{
+  height:150px;
+  width:1100px;
+  background-color: hotpink;
+  text-align: center;
+  font-size: 50px
+}
+#middle{
+  background-color: red;
+  text-align: center;
+  font-size: 20px;
+  height: 600px;
+  width: 1100px;
+  border: solid black 1px;
+}
+#image_top{
+  background-color: blue;
+}
+#links{
+  background-color: yellow;
+  height:60px;
+  width:1100px;
+  font-size: 12px;
+  border: solid black 1px;
+}
+#wrapper{
+  background-color: blue;
+  height:900px;
+  width:1101px;
+  border:solid black 3px;
+  margin:auto;
+  text-align: center;
+}
+
+#motIMage{
+  height:10px;
+}
+.buttons {
+  height:30px;
+  width:100px;
+  font-weight: bold;
+  padding: 0 40px;
+  background: salmon;
+  border: solid black 1px;
+  float:left;
+  margin-left: 32px;
+  margin-top: 12.5px;
+}
+.buttons:hover {
+  background: pink;
+}
