@@ -1,3 +1,3 @@
 function Game(){
-  this.ga = new Game();
+  this.ga = new GameArea();
 }
