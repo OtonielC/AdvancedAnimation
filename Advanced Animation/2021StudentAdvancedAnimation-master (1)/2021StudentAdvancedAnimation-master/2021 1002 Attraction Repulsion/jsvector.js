@@ -10,7 +10,7 @@ function JSVector(x = 0,y = 0){
 // Set the magnitude of the vector,
 // retaining the angle (direction).
 JSVector.prototype.setMagnitude = function(mag){
-  
+
 }
 
 // Get the magnitude of the vector using pythagorean theorem
