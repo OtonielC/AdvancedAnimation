@@ -42,5 +42,6 @@ Mover.prototype.update = function(){
 }
 
 Mover.prototype.checkEdges = function(){
-
+  let canvas = game.canvas;
+  if(this.loc.x > canvas)
 }
