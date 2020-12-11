@@ -75,6 +75,9 @@ JSVector.prototype.divide = function(scalar){
 
 // Normalize this vector so that it has a magnitude of 1
 JSVector.prototype.normalize = function(){
+  if(this.x === 0 && this.y === 0){
+    console.log("normalizing a zero vector");
+  }
   let dir = this.getDirection();
   this.x = Math.cos(dir);
   this.y = Math.sin(dir);

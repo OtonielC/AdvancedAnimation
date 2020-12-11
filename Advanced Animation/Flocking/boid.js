@@ -4,8 +4,8 @@ function Boid(x, y){
   let dy = Math.random() * 4 - 2;
   this.vel = new JSVector(dx, dy);
   this.acc = new JSVector(0,0);
-  this.maxSpeed = 10;
-  this.maxForce = 10;
+  this.maxSpeed = 2;
+  this.maxForce = .035;
   this.radius = 10;
   this.scl = 10;
   this.clr = "rgba(255,255,255)";
@@ -20,7 +20,10 @@ Boid.prototype.run = function(){
 
 Boid.prototype.update = function(){
   this.flock();
+  this.acc.limit(this.maxForce);
   this.vel.add(this.acc);
+  this.acc.multiply(0);
+  this.vel.limit(this.maxSpeed);
   this.loc.add(this.vel);
 }
 
@@ -53,16 +56,16 @@ Boid.prototype.checkEdges = function(){
 
 Boid.prototype.flock = function(){
   let sep = this.separate();
-  //var ali = align(boids);
-  //var coh = cohesion(boids);
+  //var ali = align();
+  let coh = this.cohesion();
 
-  sep.multiply(1);
+  sep.multiply(1.2);
   //ali.multiply(1.0);
-  //coh.multiply(1.0);
+  coh.multiply(1.2);
 
-  applyForce(sep);
+  this.applyForce(sep);
   //applyForce(ali);
-  //applyForce(coh);
+  this.applyForce(coh);
 }
 
 //----------------------------ALIGNMENT---------------------------------
@@ -74,33 +77,37 @@ Boid.prototype.align = function(){
 //----------------------------COHESION---------------------------------
 
 Boid.prototype.cohesion = function(){
-  let boids = game.boidSystem;
-  var neighbordist = 50;
-  var sum = new JSVector(0,0);
-  var count = 0;
-  for(var i = 0; i < this.boids.length; i++){
-    if(this.boids[i].loc != this.boid.loc){
-      var d = JSVector.distance(this.loc, this.boids[i]);
-      if(d > 0 && d < neightbordist){
-        sum.add(this.boids[i]);
-      }
+  let nextdist = 50;
+  let coh = new JSVector(0,0);
+  let count = 0;
+  for(let i = 0; i < game.boids.length; i++){
+      let d = this.loc.distance(game.boids[i].loc);
+      if(d > 0 && d < nextdist){
+        coh.add(game.boids[i].loc);
+        count+=1
     }
   }
+  return(coh);
 }
 
 //----------------------------SEPARATION---------------------------------
 
 Boid.prototype.separate = function(){
   let sep = new JSVector(0,0);
-  for(var i = 0; i < boid; i++){
-    if(boids[i]!=this){
-      var distance = this.loc.distance(boids[i].loc);
-      if(distance<20){
-        var sepForce = JSVector.subGetNew(this.loc, boids[i].loc);
+  for(var i = 0; i < game.boids.length; i++){
+    if(game.boids[i]!=this){
+      var distance = this.loc.distance(game.boids[i].loc);
+      if(distance > 0 && distance<40){
+        var sepForce = JSVector.subGetNew(this.loc, game.boids[i].loc);
         sepForce.normalize();
         sep.add(sepForce);
       }
     }
   }
-  return(sepForce);
+  return(sep);
+}
+
+//----------------------------APPLY FORCE---------------------------------
+Boid.prototype.applyForce = function(vector){
+  this.acc.add(vector);
 }
