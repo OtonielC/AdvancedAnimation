@@ -5,7 +5,7 @@ function Boid(x, y){
   this.vel = new JSVector(dx, dy);
   this.acc = new JSVector(0,0);
   this.maxSpeed = 2;
-  this.maxForce = .035;
+  this.maxForce = .03;
   this.radius = 10;
   this.scl = 10;
   this.clr = "rgba(255,255,255)";
@@ -55,23 +55,45 @@ Boid.prototype.checkEdges = function(){
 }
 
 Boid.prototype.flock = function(){
-  let sep = this.separate();
-  //var ali = align();
-  let coh = this.cohesion();
+  //let sep = this.separate();
+  let ali = this.align();
+  //let coh = this.cohesion();
 
-  sep.multiply(1.2);
-  //ali.multiply(1.0);
-  coh.multiply(1.2);
+  //sep.multiply(1.2);
+  ali.multiply(1.5);
+  //coh.multiply(1.0);
 
-  this.applyForce(sep);
-  //applyForce(ali);
-  this.applyForce(coh);
+  //this.applyForce(sep);
+  this.applyForce(ali);
+  //this.applyForce(coh);
 }
 
 //----------------------------ALIGNMENT---------------------------------
 
 Boid.prototype.align = function(){
+  let neighborDist = 40;
   var sum = new JSVector(0,0);
+  let count = 0;
+  for(let i = 0; i < game.boids.length; i++){
+    let distance = this.loc.distance(game.boids[i].loc)
+    if(distance > 0 && distance < neighborDist){
+      sum.add(game.boids[i].vel);
+      count++;
+    }
+  }
+  sum.divide(game.boids.length);
+  sum.setMagnitude(this.maxSpeed);
+  let aliSteer = sum.sub(game.boids[i].vel);
+  aliSteer.limit(this.maxForce);
+  return aliSteer;
+
+  if(count > 0){
+    aliSteer.divide(count);
+    return this.seek(aliSteer);
+  }
+  else{
+    return (new JSVector(0,0));
+  }
 }
 
 //----------------------------COHESION---------------------------------
@@ -88,8 +110,8 @@ Boid.prototype.cohesion = function(){
     }
   }
   if(count > 0){
-    sum.divide(count);
-    return this.seek(sum);
+    coh.divide(count);
+    return this.seek(coh);
   }
   else{
     return (new JSVector(0,0));
@@ -98,7 +120,7 @@ Boid.prototype.cohesion = function(){
 
 //----------------------------SEEK---------------------------------
 Boid.prototype.seek = function(target){
-  let desired = JSVector(0,0);
+  let desired = JSVector.subGetNew(target, this.loc);
   desired.normalize();
   desired.multiply(this.maxSpeed);
   let steer = desired.sub(this.vel);
