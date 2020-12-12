@@ -84,26 +84,10 @@ Boid.prototype.cohesion = function(){
       let d = this.loc.distance(game.boids[i].loc);
       if(d > 0 && d < nextdist){
         coh.add(game.boids[i].loc);
-        count++;
+        count+=1
     }
   }
-  if(count > 0){
-    sum.divide(count);
-    return this.seek(sum);
-  }
-  else{
-    return (new JSVector(0,0));
-  }
-}
-
-//----------------------------SEEK---------------------------------
-Boid.prototype.seek = function(target){
-  let desired = JSVector(0,0);
-  desired.normalize();
-  desired.multiply(this.maxSpeed);
-  let steer = desired.sub(this.vel);
-  steer.limit(this.maxForce);
-  return steer;
+  return(coh);
 }
 
 //----------------------------SEPARATION---------------------------------
