@@ -56,22 +56,44 @@ Boid.prototype.checkEdges = function(){
 
 Boid.prototype.flock = function(){
   let sep = this.separate();
-  //var ali = align();
+  let ali = this.align();
   let coh = this.cohesion();
 
   sep.multiply(1.2);
-  //ali.multiply(1.0);
+  ali.multiply(1.0);
   coh.multiply(1.2);
 
   this.applyForce(sep);
-  //applyForce(ali);
+  this.applyForce(ali);
   this.applyForce(coh);
 }
 
 //----------------------------ALIGNMENT---------------------------------
 
 Boid.prototype.align = function(){
+  let neighborDist = 40;
   var sum = new JSVector(0,0);
+  let count = 0;
+  for(let i = 0; i < game.boids.length; i++){
+    let distance = this.loc.distance(game.boids[i].loc)
+    if(distance > 0 && distance < neighborDist){
+      sum.add(game.boids[i].vel);
+      count++;
+    }
+    sum.divide(game.boids.length);
+    sum.setMagnitude(this.maxSpeed);
+    let aliSteer = sum.sub(game.boids[i].vel);
+    aliSteer.limit(this.maxForce);
+    return aliSteer;
+  }
+
+  if(count > 0){
+    aliSteer.divide(count);
+    return this.seek(aliSteer);
+  }
+  else{
+    return (new JSVector(0,0));
+  }
 }
 
 //----------------------------COHESION---------------------------------
@@ -84,10 +106,26 @@ Boid.prototype.cohesion = function(){
       let d = this.loc.distance(game.boids[i].loc);
       if(d > 0 && d < nextdist){
         coh.add(game.boids[i].loc);
-        count+=1
+        count++;
     }
   }
-  return(coh);
+  if(count > 0){
+    coh.divide(count);
+    return this.seek(coh);
+  }
+  else{
+    return (new JSVector(0,0));
+  }
+}
+
+//----------------------------SEEK---------------------------------
+Boid.prototype.seek = function(target){
+  let desired = JSVector.subGetNew(target, this.loc);
+  desired.normalize();
+  desired.multiply(this.maxSpeed);
+  let steer = desired.sub(this.vel);
+  steer.limit(this.maxForce);
+  return steer;
 }
 
 //----------------------------SEPARATION---------------------------------

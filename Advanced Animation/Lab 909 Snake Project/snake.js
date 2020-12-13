@@ -1,12 +1,12 @@
 function Snake(){
-  this.loc = new JSVector(x,y);
+  this.loc = new JSVector();
   this.vel = new JSVector(Math.random()*10-5, Math.random()*10-5);
   this.acc = new JSVector(0, 0);
   this.segments = [];
   this.radius = 10;
 }
 
-  this.update = function(){
+Snake.prototype.update = function(){
     //this starts from the end of the segments array so that each segments follows the head
     for(var i = this.segments.length-1; i > 0; i--){
       this.segments[i].x = this.segments[i-1].x;
@@ -16,9 +16,6 @@ function Snake(){
     this.loc.add(this.vel);
     this.segments[0].x = this.loc.x;
     this.segments[0].y = this.loc.y;
-    if(food.iscolliding === true){
-      this.segments+=1
-    }
 
 
     if(this.loc.x === food.loc.x && this.loc.y === food.loc.y){
@@ -38,12 +35,13 @@ function Snake(){
 
 
 
-Ball.prototype.render = function(){
+Snake.prototype.render = function(){
   if(this === balls[0]){
     ctx.fillStyle = ('blue');
   }
-  //else if(this === balls[1]){
-  //   ctx.fillStyle = ('green');
+  else if(this === balls[1]){
+    ctx.fillStyle = ('green');
+  }
   else{
     ctx.fillStyle = 'rgba(255,0,0)';
   }

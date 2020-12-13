@@ -55,17 +55,17 @@ Boid.prototype.checkEdges = function(){
 }
 
 Boid.prototype.flock = function(){
-  //let sep = this.separate();
+  let sep = this.separate();
   let ali = this.align();
-  //let coh = this.cohesion();
+  let coh = this.cohesion();
 
-  //sep.multiply(1.2);
+  sep.multiply(1.2);
   ali.multiply(1.5);
-  //coh.multiply(1.0);
+  coh.multiply(1.0);
 
-  //this.applyForce(sep);
+  this.applyForce(sep);
   this.applyForce(ali);
-  //this.applyForce(coh);
+  this.applyForce(coh);
 }
 
 //----------------------------ALIGNMENT---------------------------------
@@ -80,12 +80,12 @@ Boid.prototype.align = function(){
       sum.add(game.boids[i].vel);
       count++;
     }
+    sum.divide(game.boids.length);
+    sum.setMagnitude(this.maxSpeed);
+    let aliSteer = sum.sub(game.boids[i].vel);
+    aliSteer.limit(this.maxForce);
+    return aliSteer;
   }
-  sum.divide(game.boids.length);
-  sum.setMagnitude(this.maxSpeed);
-  let aliSteer = sum.sub(game.boids[i].vel);
-  aliSteer.limit(this.maxForce);
-  return aliSteer;
 
   if(count > 0){
     aliSteer.divide(count);

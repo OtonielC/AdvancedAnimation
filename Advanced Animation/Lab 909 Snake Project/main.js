@@ -1,7 +1,7 @@
 //Otoniel Carreon
  //Global variables
 window.onload = init;
-var balls = [];  //  This variable will hold a reference to the Ball
+var snakes = [];  //  This variable will hold a reference to the Ball
 var ctx;        //  This variable will hold a reference to the context
 var canvas;     //  ctx will hold a reference to our canvas
 var snake = new JSVector(0, 0);
@@ -16,15 +16,15 @@ function init(){
 }
 
 function animate(){
-  requestAnimationFrame(animate);
   ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
-  for(var i = 0; i<balls.length; i++){
-    balls[i].update();
+  for(let i = 0; i<this.snakes.length; i++){
+    snakes[i].update();
   }
+  requestAnimationFrame(animate);
 }
 
 function loadBalls(num){
   for(var i = 0; i<num; i++){
-    balls[i] = new Ball(Math.random()*canvas.width,Math.random()*canvas.height);
+    snakes[i] = new Snake(Math.random()*canvas.width,Math.random()*canvas.height);
   }
 }

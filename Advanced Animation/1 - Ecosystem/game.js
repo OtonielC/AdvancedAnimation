@@ -1,3 +1,4 @@
+let movers = [];
 function Game(){
 
     this.gamePaused = false;    // the game may be paused or not
@@ -8,6 +9,7 @@ function Game(){
     // get the context
     // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
     this.ctx = this.canvas.getContext('2d'); // This is the context
+    this.createMovers(this.canvas, 20);
 
     //   create the array of boid objects
     this.boids = [];
@@ -60,5 +62,29 @@ Game.prototype.run = function(){
    }
    for(let i = 0; i < this.balls.length; i++){
      this.balls[i].run();    // run each boid
+  }
+  for(let i = 0; i < movers.length; i++){
+    movers[i].run();    // run each boid
+  }
+}
+
+
+
+
+Game.prototype.createMovers = function(canvas, numMovers){
+  for(let i = 0; i < numMovers; i++){
+    var x, y, dx, dy, radius, clr, r, g, b, numOrbs;
+    radius = 7;
+    x = Math.random() * canvas.width;
+    y = Math.random() * canvas.height;
+    dx = Math.random() * 2 - 1;
+    dy = Math.random() * 2 - 1;
+    r = Math.random() * 200 + 55;
+    g = Math.random() * 155;
+    b = Math.random() * 155;
+    clr = 'rgba('+r +' ' + g + ' ' + b + ')';
+    numOrbs = Math.floor(Math.random() * 5 + 3);
+
+    movers[i] = new Mover(x, y, dx, dy, radius, clr, numOrbs);
   }
 }

@@ -1,20 +1,23 @@
-//Otoniel Carreon
- //Global variables
- let game;
 
-window.onload = init;
+
+
+let game;   // a single global object
+
+window.onload = init;//  After the window has been loaded, go to init
 
 function init(){
-  game = new Game();
-  animate();
+    game = new Game();  // global game
+    animate();          // kick off the animation
 }
 
+//  animation loop called 60 fps
 function animate(){
   if(!game.gamePaused){
-    let ctx = game.context;
-    ctx.fillStyle = 'rbga(255,0,0,.35)';
-    ctx.fillRect(0, 0, game.canvas.width, game.canvas.height);
-    game.run();
+    let ctx = game.ctx;
+    // paint the canvas with mostly transparent black
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0,0,game.canvas.width,game.canvas.height);
+    game.run();    // run the game
   }
   requestAnimationFrame(animate);
 }
