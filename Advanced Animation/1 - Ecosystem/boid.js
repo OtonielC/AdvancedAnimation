@@ -7,8 +7,8 @@ function Boid(x, y){
   this.maxSpeed = 2;
   this.maxForce = .035;
   this.radius = 10;
-  this.scl = 10;
-  this.clr = "rgba(255,255,255)";
+  this.scl = 5;
+  this.clr = "rgba(0,255,0)";
 }
 
 
@@ -19,12 +19,14 @@ Boid.prototype.run = function(){
 }
 
 Boid.prototype.update = function(){
+  if(!game.gamePaused){
   this.flock();
   this.acc.limit(this.maxForce);
   this.vel.add(this.acc);
   this.acc.multiply(0);
   this.vel.limit(this.maxSpeed);
   this.loc.add(this.vel);
+}
 }
 
 Boid.prototype.render = function(){
@@ -46,11 +48,17 @@ Boid.prototype.render = function(){
 }
 
 Boid.prototype.checkEdges = function(){
-  if(this.loc.x > canvas.width || this.loc.x < 0){
-      this.vel.x = -this.vel.x;
+  if(this.loc.x > game.canvas.width){
+    this.loc.x = 0;
   }
-  if(this.loc.y > canvas.height || this.loc.y < 0){
-      this.vel.y = -this.vel.y;
+  if(this.loc.x < 0){
+    this.loc.x = game.canvas.width;
+  }
+  if(this.loc.y > game.canvas.height){
+    this.loc.y = 0;
+  }
+  if(this.loc.y < 0){
+    this.loc.y = game.canvas.height;
   }
 }
 

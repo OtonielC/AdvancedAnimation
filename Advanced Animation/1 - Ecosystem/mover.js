@@ -41,10 +41,11 @@ Mover.prototype.render = function(){
 
 //move the mover
 Mover.prototype.update = function(){
+  if(!game.gamePaused){
   this.vel.add(this.acc);
   this.loc.add(this.vel);
 }
-
+}
 Mover.prototype.checkEdges = function(){
     if(this.loc.x > canvas.width || this.loc.x < 0){
         this.vel.x = -this.vel.x;

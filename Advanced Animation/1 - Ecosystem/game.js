@@ -1,5 +1,11 @@
 let movers = [];
+let snakes = [];
 function Game(){
+
+    let numBoids = 20;
+    let numBalls = 5;
+    let numSnakes = 2;
+    let numRotators = 5;
 
     this.gamePaused = false;    // the game may be paused or not
     this.ga = new GameArea();   // create all the dom elements
@@ -9,25 +15,21 @@ function Game(){
     // get the context
     // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
     this.ctx = this.canvas.getContext('2d'); // This is the context
-    this.createMovers(this.canvas, 20);
+    this.createMovers(this.canvas, numRotators);
+    loadSnakes(numSnakes);
 
     //   create the array of boid objects
     this.boids = [];
     this.balls = [];
-    let numBalls = 15;
     for(var i = 0; i < numBalls; i++){
-        let rad = 20;
+        let rad = 10;
         let clr = "red";
         this.balls.push(new Ball(this.canvas,rad, clr)); // add new boid to array
     }
 
-    for(let i = 0; i < 20; i++){
-      this.balls.push(new Ball(this.canvas.width/2, this.canvas.height/2));
-    }
-    for(let i = 0; i < 20; i++){
+    for(let i = 0; i < numBoids; i++){
       this.boids.push(new Boid(this.canvas.width/2, this.canvas.height/2));
     }
-
 
 
 
@@ -66,10 +68,17 @@ Game.prototype.run = function(){
   for(let i = 0; i < movers.length; i++){
     movers[i].run();    // run each boid
   }
+  for(let i = 0; i < snakes.length; i++){
+    snakes[i].run();
+  }
 }
 
 
-
+function loadSnakes(num){
+  for(var i = 0; i<num; i++){
+    snakes[i] = new Snake(Math.random()*canvas.width,Math.random()*canvas.height);
+  }
+}
 
 Game.prototype.createMovers = function(canvas, numMovers){
   for(let i = 0; i < numMovers; i++){
@@ -87,4 +96,8 @@ Game.prototype.createMovers = function(canvas, numMovers){
 
     movers[i] = new Mover(x, y, dx, dy, radius, clr, numOrbs);
   }
+}
+
+Game.prototype.isColliding = function(){
+  if(snake)
 }

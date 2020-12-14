@@ -11,7 +11,7 @@ function init(){
   canvas.style.border = 'solid black 2px';
   canvas.style.backgroundColor = 'rgba(0,44,55, .5)';
   ctx = canvas.getContext('2d');
-  loadBalls(70);
+  loadSnakes(10);
   animate();
 }
 
@@ -23,7 +23,7 @@ function animate(){
   requestAnimationFrame(animate);
 }
 
-function loadBalls(num){
+function loadSnakes(num){
   for(var i = 0; i<num; i++){
     snakes[i] = new Snake(Math.random()*canvas.width,Math.random()*canvas.height);
   }

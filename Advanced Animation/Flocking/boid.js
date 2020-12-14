@@ -46,11 +46,17 @@ Boid.prototype.render = function(){
 }
 
 Boid.prototype.checkEdges = function(){
-  if(this.loc.x > canvas.width || this.loc.x < 0){
-      this.vel.x = -this.vel.x;
+  if(this.loc.x > game.canvas.width){
+    this.loc.x = 0;
   }
-  if(this.loc.y > canvas.height || this.loc.y < 0){
-      this.vel.y = -this.vel.y;
+  if(this.loc.x < 0){
+    this.loc.x = game.canvas.width;
+  }
+  if(this.loc.y > game.canvas.height){
+    this.loc.y = 0;
+  }
+  if(this.loc.y < 0){
+    this.loc.y = game.canvas.height;
   }
 }
 
@@ -60,8 +66,8 @@ Boid.prototype.flock = function(){
   let coh = this.cohesion();
 
   sep.multiply(1.2);
-  ali.multiply(1.5);
-  coh.multiply(1.0);
+  ali.multiply(0.5);
+  coh.multiply(0.5);
 
   this.applyForce(sep);
   this.applyForce(ali);
@@ -71,7 +77,7 @@ Boid.prototype.flock = function(){
 //----------------------------ALIGNMENT---------------------------------
 
 Boid.prototype.align = function(){
-  let neighborDist = 40;
+  let neighborDist = 100;
   var sum = new JSVector(0,0);
   let count = 0;
   for(let i = 0; i < game.boids.length; i++){
@@ -99,7 +105,7 @@ Boid.prototype.align = function(){
 //----------------------------COHESION---------------------------------
 
 Boid.prototype.cohesion = function(){
-  let nextdist = 50;
+  let nextdist = 100;
   let coh = new JSVector(0,0);
   let count = 0;
   for(let i = 0; i < game.boids.length; i++){
