@@ -1,14 +1,18 @@
 function Boid(x, y){
-  this.loc = new JSVector(x, y);
+  this.loc = new JSVector(
+        Math.random()*game.canvas.width - game.canvas.width/2,
+        Math.random()*game.canvas.height - game.canvas.height/2);
   let dx = Math.random() * 4 - 2;
   let dy = Math.random() * 4 - 2;
   this.vel = new JSVector(dx, dy);
   this.acc = new JSVector(0,0);
-  this.maxSpeed = 2;
+  this.maxSpeed = 3;
   this.maxForce = .035;
   this.radius = 10;
+  this.isDead = false;
   this.scl = 5;
   this.clr = "rgba(0,255,0)";
+  this.vel.setMagnitude(this.maxSpeed);
 }
 
 
@@ -26,11 +30,18 @@ Boid.prototype.update = function(){
   this.acc.multiply(0);
   this.vel.limit(this.maxSpeed);
   this.loc.add(this.vel);
+  for(let i = 0; i < game.boids.length; i++){
+    let b = game.boids[i];
+    if(b.isDead === true){
+      game.boids.splice(i, 1);
+    }
+  }
 }
 }
 
 Boid.prototype.render = function(){
   let ctx = game.ctx;
+  ctx.lineWidth = 2;
   ctx.save();
   ctx.translate(this.loc.x, this.loc.y);
   ctx.rotate(this.vel.getDirection() + Math.PI / 2); //offset 90 degrees
@@ -67,9 +78,9 @@ Boid.prototype.flock = function(){
   let ali = this.align();
   let coh = this.cohesion();
 
-  sep.multiply(1.2);
+  sep.multiply(2.0);
   ali.multiply(1.0);
-  coh.multiply(1.2);
+  coh.multiply(1.0);
 
   this.applyForce(sep);
   this.applyForce(ali);
@@ -79,51 +90,44 @@ Boid.prototype.flock = function(){
 //----------------------------ALIGNMENT---------------------------------
 
 Boid.prototype.align = function(){
-  let neighborDist = 40;
+  let neighborDist = 100;
   var sum = new JSVector(0,0);
   let count = 0;
   for(let i = 0; i < game.boids.length; i++){
     let distance = this.loc.distance(game.boids[i].loc)
-    if(distance > 0 && distance < neighborDist){
+    if(distance < neighborDist){
       sum.add(game.boids[i].vel);
       count++;
     }
-    sum.divide(game.boids.length);
-    sum.setMagnitude(this.maxSpeed);
-    let aliSteer = sum.sub(game.boids[i].vel);
-    aliSteer.limit(this.maxForce);
-    return aliSteer;
   }
 
-  if(count > 0){
-    aliSteer.divide(count);
+  if(count > 1){
+    sum.divide(count);
+    sum.setMagnitude(this.maxSpeed);
+    let aliSteer = sum.sub(this.vel);
     return this.seek(aliSteer);
   }
-  else{
     return (new JSVector(0,0));
-  }
 }
 
 //----------------------------COHESION---------------------------------
 
 Boid.prototype.cohesion = function(){
-  let nextdist = 50;
+  let nextdist = 100;
   let coh = new JSVector(0,0);
   let count = 0;
   for(let i = 0; i < game.boids.length; i++){
       let d = this.loc.distance(game.boids[i].loc);
-      if(d > 0 && d < nextdist){
+      if(d < nextdist){
         coh.add(game.boids[i].loc);
         count++;
     }
   }
-  if(count > 0){
+  if(count > 1){
     coh.divide(count);
     return this.seek(coh);
   }
-  else{
-    return (new JSVector(0,0));
-  }
+  return (new JSVector(0,0));
 }
 
 //----------------------------SEEK---------------------------------
@@ -132,7 +136,6 @@ Boid.prototype.seek = function(target){
   desired.normalize();
   desired.multiply(this.maxSpeed);
   let steer = desired.sub(this.vel);
-  steer.limit(this.maxForce);
   return steer;
 }
 
@@ -145,10 +148,14 @@ Boid.prototype.separate = function(){
       var distance = this.loc.distance(game.boids[i].loc);
       if(distance > 0 && distance<40){
         var sepForce = JSVector.subGetNew(this.loc, game.boids[i].loc);
-        sepForce.normalize();
+        sepForce.divide(distance);
         sep.add(sepForce);
       }
     }
+  }
+  if(sep.x != 0 && sep.y != 0){
+      sep.setMagnitude(this.maxSpeed);  // desired
+      sep.sub(this.vel);    // steering
   }
   return(sep);
 }
@@ -156,4 +163,15 @@ Boid.prototype.separate = function(){
 //----------------------------APPLY FORCE---------------------------------
 Boid.prototype.applyForce = function(vector){
   this.acc.add(vector);
+}
+
+//----------------------------IS DEAD---------------------------------
+
+Boid.prototype.isDead = function(){
+  for(i=0;i<game.boids.length;i++){
+  if(game.boids[i].loc.distance(snakes[i].loc) < 20){
+    game.boids[i].isDead = true;
+  }
+  game.boids[i].isDead = false;
+}
 }

@@ -28,7 +28,7 @@ Ball.prototype.run = function(){
 // draw the boid on the canvas
 Ball.prototype.render = function(){
     let ctx = game.ctx;
-
+    ctx.lineWidth = 4;
     ctx.strokeStyle = this.color;
     ctx.beginPath();
     // +++++++++++++++++++++++
@@ -42,6 +42,12 @@ Ball.prototype.render = function(){
 // Add velocity to location
 Ball.prototype.update = function(){
   if(!game.gamePaused) {
+    let bArea = this.radius*2;
+    for(let i = 0; i < game.balls.length; i++){
+      if(this.loc.distance(bArea) < 30){
+        this.vel.multiply(-1);
+      }
+    }
       this.loc.add(this.vel);
     }
 }

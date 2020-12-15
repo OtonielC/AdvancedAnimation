@@ -1,8 +1,8 @@
 let movers = [];
 let snakes = [];
 function Game(){
-
-    let numBoids = 20;
+    game = this;
+    let numBoids = 40;
     let numBalls = 5;
     let numSnakes = 2;
     let numRotators = 5;
@@ -22,7 +22,7 @@ function Game(){
     this.boids = [];
     this.balls = [];
     for(var i = 0; i < numBalls; i++){
-        let rad = 10;
+        let rad = 15;
         let clr = "red";
         this.balls.push(new Ball(this.canvas,rad, clr)); // add new boid to array
     }
@@ -96,8 +96,4 @@ Game.prototype.createMovers = function(canvas, numMovers){
 
     movers[i] = new Mover(x, y, dx, dy, radius, clr, numOrbs);
   }
-}
-
-Game.prototype.isColliding = function(){
-  if(snake)
 }
