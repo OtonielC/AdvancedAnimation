@@ -2,6 +2,8 @@
 function Ball(canvas,rad, clr){
     this.radius = rad;
     this.color = clr;
+    this.lifeSpan = 1000;
+    this.isDead = false;
     // random location
     let x = (Math.random() * (canvas.width - 2*this.radius)) + this.radius;
     let y = (Math.random() * (canvas.height - 2*this.radius)) + this.radius;
@@ -49,6 +51,11 @@ Ball.prototype.update = function(){
       }
     }
       this.loc.add(this.vel);
+
+      this.lifeSpan--;
+      if(this.lifeSpan === 0){
+        this.isDead = true;
+      }
     }
 }
 

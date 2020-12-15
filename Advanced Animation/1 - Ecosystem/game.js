@@ -2,7 +2,7 @@ let movers = [];
 let snakes = [];
 function Game(){
     game = this;
-    let numBoids = 40;
+    let numBoids = 100;
     let numBalls = 5;
     let numSnakes = 2;
     let numRotators = 5;

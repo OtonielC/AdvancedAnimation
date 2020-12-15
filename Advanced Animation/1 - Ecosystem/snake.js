@@ -14,6 +14,7 @@ Snake.prototype.run = function(){
   this.update();
   this.render();
   this.checkEdges();
+  this.isColliding();
 }
 
 Snake.prototype.update = function(){
@@ -48,10 +49,11 @@ Snake.prototype.render = function(){
   }
 }
 
-// Snake.prototype.isColliding = function(){
-//   for(let i = 0; i < game.snakes.length; i++){
-//       if(this.loc.distance(game.boids[i].loc) < 20){
-//         game.boids.splice(i, 1);
-//       }
-//   }
-// }
+Snake.prototype.isColliding = function(){
+  for(let i = 0; i < game.boids.length; i++){
+      if(this.loc.distance(game.boids[i].loc) < 20){
+        game.boids.splice(i, 1);
+        i--;
+      }
+  }
+}
