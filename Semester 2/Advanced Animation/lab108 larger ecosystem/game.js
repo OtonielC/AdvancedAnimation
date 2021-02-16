@@ -1,12 +1,13 @@
+let snakes = [];
 function Game(){
-
+  let numSnakes = 3;
     this.canvas1 = document.getElementById('cnv1');
     this.context1 = this.canvas1.getContext('2d');
     this.canvas2 = document.getElementById('cnv2');
     this.context2 = this.canvas2.getContext('2d');
 
     this.canvas1Loc = new JSVector();
-
+    loadSnakes(numSnakes);
     this.world = {
         top: -1500,
         left: -2000,
@@ -86,13 +87,20 @@ Game.prototype.run = function(){
     ctx2.lineTo(this.world.right, 0);
     ctx2.moveTo(0, this.world.top);
     ctx2.lineTo(0, this.world.bottom);
-    ctx1.lineWidth = 1;
-    ctx1.strokeStyle = 'red';
-    ctx1.stroke();
+    ctx2.lineWidth = 10;
+    ctx2.strokeStyle = 'red';
+    ctx2.stroke();
     // draw the outline of canvas1 in canvas2
-
+    ctx2.strokeStyle = 'green';
+    ctx2.strokeRect(this.world.left, this.world.top, this.world.width, this.world.height);
     // run all the actors
     ctx1.restore();
     ctx2.restore();
 
+}
+
+function loadSnakes(num){
+  for(var i = 0; i<num; i++){
+    snakes[i] = new Snake(Math.random()*this.world.width,Math.random()*this.world.height);
+  }
 }
