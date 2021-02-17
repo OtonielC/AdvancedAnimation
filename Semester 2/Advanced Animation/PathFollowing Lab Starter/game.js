@@ -30,6 +30,7 @@ function Game(){
     for(let c = 0; c < pathCells.length; c++){
         let cell = this.grid[pathCells[c][0]][pathCells[c][1]];
         cell.isPath = true;
+        //pushes the cells into the path array
         this.path.push(cell);
     }
 

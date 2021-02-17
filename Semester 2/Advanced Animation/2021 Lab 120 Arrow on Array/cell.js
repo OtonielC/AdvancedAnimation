@@ -1,7 +1,7 @@
 class Cell {
 	constructor(env,row,col,num) {
-		this.x = env.world.left + (env.cellWidth) * row;
-		this.y = env.world.bottom -(env.cellHeight) * col - env.cellHeight;
+		this.x = env.world.left + env.cellWidth * col;
+		this.y = env.world.top + env.cellHeight * row;
 		this.width = env.cellWidth;
 		this.height = env.cellHeight;
 		this.env =env;
@@ -33,16 +33,24 @@ class Cell {
 
 	setNeighbors() {
 		if(this.row != 0) {
-			this.west = this.env.cells[this.row-1][this.column]
+			if(this.env.cells[this.row-1][this.column].occupied === false){
+				this.north = this.env.cells[this.row-1][this.column]
+			}
 		}
 		if(this.row != this.env.nRows-1) {
-			this.east = this.env.cells[this.row+1][this.column]
+			if(this.env.cells[this.row+1][this.column].occupied === false){
+				this.south = this.env.cells[this.row+1][this.column]
+			}
 		}
-		if(this.column != this.env.nCols) {
-			this.north = this.env.cells[this.row][this.column+1]
+		if(this.column != this.env.nCols-1) {
+			if(this.env.cells[this.row][this.column+1].occupied === false){
+				this.east = this.env.cells[this.row][this.column+1]
+			}
 		}
 		if(this.column != 0) {
-			this.south = this.env.cells[this.row][this.column-1]
+			if(this.env.cells[this.row][this.column-1].occupied === false){
+				this.west = this.env.cells[this.row][this.column-1]
+			}
 		}
 
 
@@ -55,29 +63,26 @@ class Cell {
 
 
 		if(this.occupied == true) {
-			ctx1.fillStyle = "brown";
+			ctx1.fillStyle = "blue";
 		}
-		else{ctx1.fillStyle = "green";}
-
-        ctx1.fillRect(this.x, this.y, this.width, this.height);
-
-
-		ctx1.stroke();
-
-		ctx1.strokeStyle ="white";
-		ctx1.fillStyle = "white";
-		ctx1.font = "12px Times_New_Roman";
-
-
-		ctx1.fillText("column =  " + this.column, this.x,this.y+this.height/3);
-		ctx1.fillText("row = " + this.row, this.x,this.y+this.height/2);
-		ctx1.stroke();
-
+		else{ctx1.fillStyle = "green";
 	}
 
-	update() {
+	ctx1.fillRect(this.x, this.y, this.width, this.height);
+	ctx1.strokeStyle ="black";
+	ctx1.strokeRect(this.x, this.y, this.width, this.height);
+	ctx1.fillStyle = "white";
+	ctx1.font = "12px Times_New_Roman";
+
+	ctx1.fillText(this.column, this.x,this.y+this.height/3);
+	ctx1.fillText(this.row, this.x,this.y+this.height/2);
+	ctx1.stroke();
+
+}
+
+update() {
 
 
 
-	}
+}
 }

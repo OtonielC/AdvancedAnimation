@@ -8,11 +8,6 @@ class Cell {
         this.r = r;
         this.c = c;
         this.isPath = false;
-        // this.num = num
-        // let red = Math.random() * 2;
-        // let grn = Math.random() * 200 + 55;
-        // let blu = Math.random() * 100 + 55;
-        // this.clr = "rgba(" + red + ", " + grn + "," + blu + ", " + .65 + ")"
     }//  +++++++++  end constructor
 
     run() {

@@ -4,6 +4,7 @@
 class Actor {
     constructor(game){
         // start off the actor in the first cell of the path
+        this.maxSpeed = 1;
         this.pathIndex = 0;
         this.currentCell = game.path[this.pathIndex];
         this.nextCell = game.path[this.pathIndex+1];   // next in the path of cells
@@ -14,8 +15,9 @@ class Actor {
         // position the actor initially in the center of the first cell
         this.loc = new JSVector(this.currentCell.loc.x + this.currentCell.width/2,
                                 this.currentCell.loc.y + this.currentCell.height/2);
-        this.vel = new JSVector(0,0);   // velocity
-        this.acc = new JSVector(0,0);
+        this.vel = JSVector.subGetNew(this.target, this.loc);   // velocity
+        this.vel.setMagnitude(this.maxSpeed);
+
     }
 
     run() {
@@ -26,32 +28,10 @@ class Actor {
     update(){
         // move this actor along the path until it reaches the end of
         // the path and dies
-        if(this.loc.distance(this.target) < 20){
-          this.pathIndex += 1;
-          this.currentCell = game.path(this.pathIndex);
-          this.nextCell = game.path(this.pathIndex+1);
-          this.target = new JSVector(this.nextCell.loc.x = this.nextcell.width/2, this.nextCell.loc.y + this.nextCell.height/2);
-        }
-        this.seek(this.target);
+        this.vel.limit(this.maxSpeed);
         this.loc.add(this.vel);
-        this.vel.add(this.acc);
-        this.acc.limit(.2);
+        
     }
-
-
-    applyForce(force){
-      this.acc.add(force);
-    }
-
-
-    seek(target){
-      let desired = new JSVector.subGetNew(target, this.loc);
-      desires.setMagnitude(.6);
-      let steer = new JSVector.subGetNew(desired, this.vel);
-      steer.limit(this.maxForce);
-      this.applyForce(steer);
-    }
-
 
     render(){
         let ctx = game.ctx;
