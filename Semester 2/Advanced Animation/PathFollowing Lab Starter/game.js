@@ -1,5 +1,5 @@
 function Game(){
-
+    this.counter = 0;
     this.ga = new GameArea();   // create all the dom elements
     // get the canvas as a property of the game
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas
@@ -43,6 +43,10 @@ function Game(){
 
 // function to run the game each animation cycle
 Game.prototype.run = function(){
+    this.counter++;
+    if(this.counter%180 === 0){
+      this.addActor();
+    }
     this.ctx.fillStyle = "saddlebrown";
     this.ctx.fillRect(0,0,this.canvas.width, this.canvas.height);
     for (let r = 0; r < this.grid.length; r++) {
@@ -62,4 +66,8 @@ Game.prototype.run = function(){
         this.actors[i].run();
     }
 
+}
+
+Game.prototype.addActor =  function(){
+    this.actors.push(new Actor(this));
 }

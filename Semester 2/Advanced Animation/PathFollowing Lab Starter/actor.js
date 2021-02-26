@@ -18,6 +18,7 @@ class Actor {
         this.vel = JSVector.subGetNew(this.target, this.loc);   // velocity
         this.vel.setMagnitude(this.maxSpeed);
 
+
     }
 
     run() {
@@ -26,11 +27,26 @@ class Actor {
     }
 
     update(){
-        // move this actor along the path until it reaches the end of
-        // the path and dies
-        this.vel.limit(this.maxSpeed);
-        this.loc.add(this.vel);
-        
+
+
+      if(this.loc.distance(this.target) < this.nextCell.width/2){
+        this.pathIndex++;
+        this.currentCell = this.nextCell;
+        if(this.currentCell === this.lastCell){
+            game.actors.splice(game.actors.indexOf(this), 1);
+            return;
+        }
+        this.nextCell = game.path[this.pathIndex+1];
+        this.target = new JSVector(this.nextCell.loc.x + this.nextCell.width/2, this.nextCell.loc.y + this.nextCell.height/2);
+      }
+      this.acc = JSVector.subGetNew(this.target, this.loc);
+      this.acc.setMagnitude(.05);
+
+      // move this actor along the path until it reaches the end of
+      // the path and dies
+      this.vel.add(this.acc);
+      this.vel.limit(this.maxSpeed);
+      this.loc.add(this.vel);
     }
 
     render(){
