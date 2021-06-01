@@ -17,7 +17,15 @@ class Actor {
                                 this.currentCell.loc.y + this.currentCell.height/2);
         this.vel = JSVector.subGetNew(this.target, this.loc);   // velocity
         this.vel.setMagnitude(this.maxSpeed);
-
+        this.virusPNG = [];
+        for(let i = 0; i < 6; i++){
+          let img = new Image();
+          let fName = 'Virus/Virus000'+ (i+1) +'.png';
+          img.src = fName;
+          this.virusPNG.push(img);
+        }
+        this.index = 0;
+        this.count = 0;
 
     }
 
@@ -51,11 +59,14 @@ class Actor {
 
     render(){
         let ctx = game.ctx;
-        ctx.strokeStyle = "black";
-        ctx.fillStyle = "brown";
-        ctx.beginPath();
-        ctx.arc(this.loc.x, this.loc.y, 6, 0, Math.PI*2);
-        ctx.fill();
-        ctx.stroke();
+        ctx.drawImage(this.virusPNG[this.index], this.loc.x-this.virusPNG[this.index].width/2, this.loc.y-this.virusPNG[this.index].height/2);
+        this.count++;
+        if(this.count>=12){
+          this.count = 0;
+          this.index++;
+          if(this.index >= 6){
+            this.index = 0;
+          }
+        }
     }
 }
